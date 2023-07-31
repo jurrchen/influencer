@@ -1,12 +1,14 @@
+import Donation from "./widgets/Donation"
 import FeaturedCollection from "./widgets/FeaturedCollection"
 import ImageBanner from "./widgets/ImageBanner"
+import InstagramFeed from "./widgets/InstaFeed"
 import VideoBanner from "./widgets/VideoBanner"
 import YoutubeFeed from "./widgets/YoutubeFeed"
 
 
 
 export default function Website() {
-  return <div style={{width: '960px', height: '800px', backgroundColor: 'pink', overflow: 'hidden', display: 'flex'}}>
+  return <div style={{height: '800px', backgroundColor: 'pink', overflow: 'hidden', display: 'flex'}}>
     <div style={{overflow: 'scroll', boxSizing: 'border-box'}}>
       <pre>
         {`
@@ -21,6 +23,8 @@ export default function Website() {
         }
         `}
       </pre>
+      <Donation />
+      <InstagramFeed />
       <YoutubeFeed />
       <VideoBanner />
       <ImageBanner />

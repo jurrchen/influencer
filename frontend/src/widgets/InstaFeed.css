@@ -1,0 +1,27 @@
+.instagram-feed {
+  text-align: center;
+}
+
+.instagram-header {
+  margin-bottom: 20px;
+}
+
+.instagram-header button {
+  display: inline-block;
+}
+
+.instagram-posts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.instagram-posts a {
+  margin: 0;
+}
+
+.instagram-posts img {
+  width: 250px; /* Adjust this value as needed */
+  height: 250px; /* Adjust this value as needed */
+  object-fit: cover;
+}
