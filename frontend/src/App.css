@@ -2,17 +2,16 @@
   display: flex;
   flex-direction: row;
   height: 100vh;
-}
-
-.panel {
-  display: flex;
-  box-sizing: border-box;
+  width: 100vw;
 }
 
 .left-panel {
-  flex: 1; /* This makes the left panel take up the rest of the space */
+  flex-grow: 1; /* This makes the left panel take up the rest of the space */
 }
 
 .right-panel {
-  flex: 0 0 300px; /* This makes the right panel always be 300px */
+  flex: 0 0 300px; /* This makes the right panel always be 300px
+  /* flex-shrink: 0; */
+  width: 300px;  
+  overflow: auto;
 }
