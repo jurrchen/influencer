@@ -1,0 +1,56 @@
+.youtube-feed {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.youtube-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.youtube-header h2 {
+  margin-left: 10px;
+}
+
+.youtube-header button {
+  margin-right: 10px;
+}
+
+.youtube-video {
+  margin: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+.youtube-thumbnail {
+  position: relative;
+  overflow: hidden;
+}
+
+.youtube-thumbnail img {
+  width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.youtube-thumbnail:hover img {
+  opacity: 0.5;
+}
+
+.youtube-title {
+  color: #222;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background: url('https://storage.googleapis.com/popshopprod-shop-renderer-assets-q9gk7sc6/themes/assets/db2c1500-ba02-4f1a-ab7f-2c560ae47c35/assets/yt_icon.png?v=efb3f0dac77121383b036757455c96916485cb68e5d09739435912ddbd97086f') no-repeat center center; /* Replace with your play button image */
+  background-size: contain;
+}
