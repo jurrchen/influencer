@@ -9,9 +9,9 @@ import YoutubeFeed from "./widgets/YoutubeFeed"
 export default function Website(props: {website: WebsiteDefinition}) {
   return <div style={{height: '800px', width: '100%', backgroundColor: 'pink', overflow: 'hidden', display: 'flex'}}>
     <div style={{overflow: 'scroll', boxSizing: 'border-box'}}>
-      <pre>
+      {/* <pre>
         {JSON.stringify(props.website, null, 2)}
-      </pre>
+      </pre> */}
       {
         props.website.sections.map((section) => {
           switch(section.sectionType) {

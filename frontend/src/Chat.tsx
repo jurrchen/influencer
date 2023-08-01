@@ -21,18 +21,23 @@ type Message = {
 
 export default function Chat(props: {appendSection: (s: Section) => void}) {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const appendMessage = useCallback((mess: string, direction: MessageDirection) => {
-    setMessages([
-      ...messages,
+    setMessages(prevMessages => ([
+      ...prevMessages,
       { message: mess, direction},
-    ])
-  }, [messages, setMessages]);
+    ]))
+  } , [setMessages]);
 
   const openAICompletion = async (message: string) => {
     await appendMessage(message, 'outgoing')
 
+    setLoading(true)
+    
     await openAIMessage(message, appendMessage, props.appendSection)
+
+    setLoading(false)
   }
 
   return (
@@ -59,6 +64,7 @@ export default function Chat(props: {appendSection: (s: Section) => void}) {
           </MessageList>
           <MessageInput 
             placeholder="Type message here" 
+            disabled={loading}
             onSend={(message) => openAICompletion(message)}
           />
         </ChatContainer>
