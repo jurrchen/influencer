@@ -8,7 +8,7 @@ import {
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
 import { useCallback, useState } from "react";
 import openAIMessage from "./lib/openai";
-import { Section } from "./lib/types";
+import { GlobalSetters, Section, WebsiteDefinition } from "./lib/types";
 
 // send this shit direct to open AI
 // how do we maintain state?
@@ -19,7 +19,11 @@ type Message = {
   direction: MessageDirection,
 };
 
-export default function Chat(props: {appendSection: (s: Section) => void}) {
+export default function Chat(props: {
+  appendSection: (s: Section) => void,
+  website: WebsiteDefinition,
+  setGlobals: GlobalSetters,
+}) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +39,7 @@ export default function Chat(props: {appendSection: (s: Section) => void}) {
 
     setLoading(true)
     
-    await openAIMessage(message, appendMessage, props.appendSection)
+    await openAIMessage(message, appendMessage, props.appendSection, props.setGlobals, props.website);
 
     setLoading(false)
   }

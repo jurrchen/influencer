@@ -6,6 +6,13 @@ export type Section = {
 
 export type WebsiteDefinition = {
   font: string,
-  titleFont: string,
+  backgroundColor: string,
+  fontColor: string,
   sections: Section[],
 }
+
+export type GlobalSetters = {
+  setFont: (f: string) => void,
+  setBackgroundColor: (f: string) => void,
+  setFontColor: (f: string) => void  
+};

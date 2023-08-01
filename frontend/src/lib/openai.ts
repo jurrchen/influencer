@@ -3,7 +3,8 @@ import { Configuration, OpenAIApi } from "openai";
 import { CLASSIFIER } from "../prompts/classifier";
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
 import { ADDER } from "../prompts/adder";
-import { Section } from "./types";
+import { GlobalSetters, Section, WebsiteDefinition } from "./types";
+import { GLOBAL } from "../prompts/global";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -12,10 +13,13 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+// TODO: make this a class
 export default async function openAIMessage(
   message: string, 
   appendMessage: (a: string, b: MessageDirection) => void,
   appendSection: (s: Section) => void,
+  setGlobals: GlobalSetters,
+  current: WebsiteDefinition,
 ) {
 
   const classifier = await openai.createChatCompletion({
@@ -53,8 +57,53 @@ export default async function openAIMessage(
 
     appendSection({sectionType: adderPayload.widget})
 
-  } else {
-    appendMessage('DUNNO HOMIE', 'incoming')
+    return null;
+  } 
+  
+  if (payload.category === "global") {
+    const global = await openai.createChatCompletion({
+      model: GLOBAL.model,
+      messages: [
+        {role: "system", content: GLOBAL.system},
+        {role: "user", content: GLOBAL.user(message, current)}
+      ],
+    });
+
+    const globalPayload = JSON.parse(global.data.choices[0].message?.content || '{}')
+    appendMessage(JSON.stringify(globalPayload, null, 2), 'incoming')
+
+    globalPayload.forEach((change: any) => {
+      appendMessage(`Setting: ${change.setting}`, 'incoming')
+      if (!change.setting) {
+        appendMessage(`Failure: ${change}`, 'incoming')
+        return;
+      }
+
+      if (!change.value) {
+        appendMessage(`No value specified: ${change}`, "incoming")
+        return;
+      }
+
+      if (change.setting === "font") {
+        setGlobals.setFont(change.value)
+        return;
+      }
+
+      if (change.setting === "backgroundColor") {
+        setGlobals.setBackgroundColor(change.value)
+        return;
+      }
+
+      if (change.setting === "fontColor") {
+        setGlobals.setFontColor(change.value)
+        return;
+      }    
+    })
+
+    return null;
   }
+  
+
+  appendMessage('NOT IMPLEMENTED', 'incoming')
 
 }

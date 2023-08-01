@@ -7,11 +7,22 @@ import VideoBanner from "./widgets/VideoBanner"
 import YoutubeFeed from "./widgets/YoutubeFeed"
 
 export default function Website(props: {website: WebsiteDefinition}) {
-  return <div style={{height: '800px', width: '100%', backgroundColor: 'pink', overflow: 'hidden', display: 'flex'}}>
+  return <div style={{
+    height: '800px', 
+    width: '100%', 
+    overflow: 'hidden', 
+    display: 'flex',
+    // custom
+    color: props.website.fontColor,
+    fontFamily: props.website.font,
+    backgroundColor: props.website.backgroundColor, 
+  }}>
     <div style={{overflow: 'scroll', boxSizing: 'border-box'}}>
       {/* <pre>
         {JSON.stringify(props.website, null, 2)}
       </pre> */}
+      <h1>Jieren's website</h1>
+      <h3>Subtitle</h3>
       {
         props.website.sections.map((section) => {
           switch(section.sectionType) {
