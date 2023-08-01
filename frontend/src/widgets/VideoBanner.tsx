@@ -1,16 +1,18 @@
 import './VideoBanner.css'
 
-export default function VideoBanner() {
+export default function VideoBanner(props: {
+  [key: string]: string
+}) {
   return <div className="video-banner">
     <video playsInline autoPlay muted loop>
-      <source src="https://themes.fourthwall.com/themes/assets/db2c1500-ba02-4f1a-ab7f-2c560ae47c35/assets/video-1.mp4"/>
+      <source src={props.background}/>
     </video>
     <div className="content">
-      <h1>MY NEW COLLECTION IS OUT NOW</h1>
-      <p>Check out our new, amazing summer collection with brilliant hoodies, t-shirts, hats, shoes and blazers.</p>        
+      <h1>{props.header}</h1>
+      <p>{props.subtitle}</p>
       <div className="buttons">
-        <button className="shop-now">Shop Now</button>
-        <button className="visit-channel">Visit Channel</button>
+        <button className="shop-now">{props.call_to_action_1}</button>
+        <button className="visit-channel">{props.call_to_action_2}</button>
       </div>
     </div> 
   </div>

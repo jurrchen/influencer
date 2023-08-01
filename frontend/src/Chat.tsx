@@ -20,7 +20,7 @@ type Message = {
 };
 
 export default function Chat(props: {
-  appendSection: (s: Section) => void,
+  setSections: (s: Section[]) => void,
   website: WebsiteDefinition,
   setGlobals: GlobalSetters,
 }) {
@@ -39,7 +39,7 @@ export default function Chat(props: {
 
     setLoading(true)
     
-    await openAIMessage(message, appendMessage, props.appendSection, props.setGlobals, props.website);
+    await openAIMessage(message, appendMessage, props.setSections, props.setGlobals, props.website);
 
     setLoading(false)
   }

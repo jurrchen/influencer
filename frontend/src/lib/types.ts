@@ -1,7 +1,10 @@
 export type SectionType = 'donation' | 'featured-collection' | 'image-banner' | 'video-banner' | 'youtube-feed' | 'instagram-feed';
 
 export type Section = {
-  sectionType: SectionType
+  widget: SectionType
+  parameters: {
+    [k: string]: string
+  }
 }
 
 export type WebsiteDefinition = {

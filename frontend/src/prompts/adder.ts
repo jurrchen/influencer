@@ -1,7 +1,7 @@
 
 
 export const ADDER = {
-  model: "gpt-4",
+  model: "gpt-3.5-turbo",
   system: `
 You are a helpful assistant that will assist me with adding new widgets into my website.
 

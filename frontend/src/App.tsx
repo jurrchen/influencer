@@ -12,15 +12,16 @@ import * as WebFont from 'webfontloader';
 function App() {
 
   const [sections, setSections] = useState<Section[]>([{
-    sectionType: 'donation',
+    widget: 'donation',
+    parameters: {
+      first_amount: "5",
+      second_amount: "10",
+      third_amount: "20",
+      heading: 'THANK YOU FOR YOUR SUPPORT!',
+      description: "Thank you so much for your support. Leave a message with your donation and I'll try to reply!",
+      call_to_action: "Donate & Send Message"
+    }
   }])
-
-  const appendSection = useCallback((section: Section) => {
-    setSections([
-      ...sections,
-      section,
-    ])
-  }, [sections, setSections]);
 
   const [font, setFont] = useState('Arial')
   useEffect(() => {
@@ -49,7 +50,7 @@ function App() {
       </div>
       <div className="right-panel">
         <Chat 
-          appendSection={appendSection}
+          setSections={setSections}
           website={{
             font,
             fontColor,

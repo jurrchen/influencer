@@ -34,9 +34,11 @@ const Products = [
 ];
 
 
-export default function FeaturedCollection() {
+export default function FeaturedCollection(props: {
+  [key: string]: string
+}) {
   return <div className="featured-collection">
-    {Products.map((product, index) => (
+    {Products.slice(0, parseInt(props.number_of_items)).map((product, index) => (
         <div className="product-card" key={index}>
             <div className="product-image">
                 <img src={product.image} alt={product.title} />

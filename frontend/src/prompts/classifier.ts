@@ -6,8 +6,7 @@ export const CLASSIFIER = {
 
   Your goal is to understand the intent of the user message and respond with the correct category.
   
-  "adder": The user is trying to add a new widget to their website.
-  "editor":  The user is trying to edit an existing widget on their website.
+  "editor":  The user is trying to modify the widgets on this website, either adding, removing, or modifying.
   "global": The user is trying to edit a global setting on their website.
   "misc": It is unclear what the user is trying to do or they are trying to do something that we don't have a category for.
   

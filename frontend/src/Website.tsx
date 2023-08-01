@@ -25,21 +25,21 @@ export default function Website(props: {website: WebsiteDefinition}) {
       <h3>Subtitle</h3>
       {
         props.website.sections.map((section) => {
-          switch(section.sectionType) {
+          switch(section.widget) {
             case 'donation':
-              return <Donation />
+              return <Donation {...section.parameters}/>
             case 'featured-collection':
-              return <FeaturedCollection />
+              return <FeaturedCollection {...section.parameters}/>
             case 'image-banner':
-              return <ImageBanner />
+              return <ImageBanner {...section.parameters}/>
             case 'video-banner':
-              return <VideoBanner />
+              return <VideoBanner {...section.parameters}/>
             case 'youtube-feed':
-              return <YoutubeFeed />
+              return <YoutubeFeed {...section.parameters}/>
             case 'instagram-feed':
-              return <InstagramFeed />
+              return <InstagramFeed {...section.parameters}/>
             default:
-              return <div>Unknown section type: {section.sectionType}</div>
+              return <div>Unknown section type: {section.widget}</div>
           }
         })
       }

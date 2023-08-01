@@ -2,9 +2,9 @@ import { Configuration, OpenAIApi } from "openai";
 
 import { CLASSIFIER } from "../prompts/classifier";
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
-import { ADDER } from "../prompts/adder";
 import { GlobalSetters, Section, WebsiteDefinition } from "./types";
 import { GLOBAL } from "../prompts/global";
+import { EDITOR } from "../prompts/editor";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -17,7 +17,7 @@ const openai = new OpenAIApi(configuration);
 export default async function openAIMessage(
   message: string, 
   appendMessage: (a: string, b: MessageDirection) => void,
-  appendSection: (s: Section) => void,
+  setSections: (s: Section[]) => void,
   setGlobals: GlobalSetters,
   current: WebsiteDefinition,
 ) {
@@ -37,28 +37,6 @@ export default async function openAIMessage(
   }
 
   await appendMessage(JSON.stringify(payload, null, 2), 'incoming')
-  
-  if (payload.category === "adder") {
-    const adder = await openai.createChatCompletion({
-      model: ADDER.model,
-      messages: [
-        {role: "system", content: ADDER.system},
-        {role: "user", content: message}
-      ],
-    });
-
-    const adderPayload = JSON.parse(adder.data.choices[0].message?.content || '{}')
-
-    await appendMessage(JSON.stringify(adderPayload, null, 2), 'incoming')
-
-    if (!adderPayload.widget || adderPayload.widget === "unknown") {
-      throw new Error("FAIL")
-    }
-
-    appendSection({sectionType: adderPayload.widget})
-
-    return null;
-  } 
   
   if (payload.category === "global") {
     const global = await openai.createChatCompletion({
@@ -99,6 +77,27 @@ export default async function openAIMessage(
         return;
       }    
     })
+
+    return null;
+  }
+
+  if(payload.category === "editor") {
+
+    const editor = await openai.createChatCompletion({
+      model: EDITOR.model,
+      messages: [
+        {role: "system", content: EDITOR.system},
+        {role: "user", content: EDITOR.user(message, current.sections)}
+      ],
+    });
+
+    const editorPayload = JSON.parse(editor.data.choices[0].message?.content || '{}')
+
+    await appendMessage(JSON.stringify(editorPayload, null, 2), 'incoming')
+
+    // gets in an array
+    // and then spits out an array
+    setSections(editorPayload.widgets)
 
     return null;
   }

@@ -27,7 +27,9 @@ const INSTAS = [
   }
 ]
 
-const InstagramFeed = () => {
+const InstagramFeed = (props: {
+  [key: string]: string
+}) => {
   return (
     <div className="instagram-feed">
       <div className="instagram-header">
@@ -36,7 +38,7 @@ const InstagramFeed = () => {
         </a>
       </div>
       <div className="instagram-posts">            
-        {INSTAS.map((post, index) => (
+        {INSTAS.slice(0, parseInt(props.number_of_images)).map((post, index) => (
           <a key={index} href={post.link} target="_blank" rel="noopener noreferrer">
             <img src={post.image} alt="Instagram post" />
           </a>
