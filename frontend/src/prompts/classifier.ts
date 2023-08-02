@@ -8,6 +8,7 @@ export const CLASSIFIER = {
   
   "global": The user is trying to edit a global setting on their website, like font color, background color, or font.
   "editor":  The user is trying to modify the widgets on this website, either adding, removing, or modifying. The user is not trying to change global settings here.
+  "memberships": The user is trying to modify membership tiers or perks, either adding, removing, or modifying.
   "convo": The user is trying to start a conversation about building their business. Ignore other conversation topics.
   "misc": It is unclear what the user is trying to do or they are trying to do something that we don't have a category for.
   

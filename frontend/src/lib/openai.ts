@@ -2,10 +2,11 @@ import { Configuration, OpenAIApi } from "openai";
 
 import { CLASSIFIER } from "../prompts/classifier";
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
-import { GlobalSetters, Section, WebsiteDefinition } from "./types";
+import { GlobalSetters, MembershipTier, Section, WebsiteDefinition } from "./types";
 import { GLOBAL } from "../prompts/global";
 import { EDITOR } from "../prompts/editor";
 import { runConversation } from "./convo";
+import { MEMBERSHIPS } from "../prompts/memberships";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -19,8 +20,10 @@ export default async function openAIMessage(
   message: string, 
   appendMessage: (a: string, b: MessageDirection) => void,
   setSections: (s: Section[]) => void,
+  setMemberships: (m: MembershipTier[]) => void,
   setGlobals: GlobalSetters,
   current: WebsiteDefinition,
+  memberships: MembershipTier[],
 ) {
 
   const classifier = await openai.createChatCompletion({
@@ -102,6 +105,25 @@ export default async function openAIMessage(
 
     return null;
   }
+
+  if(payload.category === "memberships") {
+
+    const members = await openai.createChatCompletion({
+      model: MEMBERSHIPS.model,
+      messages: [
+        {role: "system", content: MEMBERSHIPS.system},
+        {role: "user", content: MEMBERSHIPS.user(message, memberships)}
+      ],
+    });
+
+    const memberPayload = JSON.parse(members.data.choices[0].message?.content || '{}')
+
+    appendMessage(JSON.stringify(memberPayload, null, 2), 'incoming')
+
+    setMemberships(memberPayload.tiers)
+
+    return null;
+  }  
 
   if(payload.category === "convo") {
     

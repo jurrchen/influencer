@@ -19,3 +19,9 @@ export type GlobalSetters = {
   setBackgroundColor: (f: string) => void,
   setFontColor: (f: string) => void  
 };
+
+export type MembershipTier = {
+  title: string,
+  cost: string,
+  perks: string[],
+}
