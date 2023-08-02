@@ -5,6 +5,7 @@ import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions"
 import { GlobalSetters, Section, WebsiteDefinition } from "./types";
 import { GLOBAL } from "../prompts/global";
 import { EDITOR } from "../prompts/editor";
+import { runConversation } from "./convo";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -93,7 +94,7 @@ export default async function openAIMessage(
 
     const editorPayload = JSON.parse(editor.data.choices[0].message?.content || '{}')
 
-    await appendMessage(JSON.stringify(editorPayload, null, 2), 'incoming')
+    appendMessage(JSON.stringify(editorPayload, null, 2), 'incoming')
 
     // gets in an array
     // and then spits out an array
@@ -101,8 +102,13 @@ export default async function openAIMessage(
 
     return null;
   }
+
+  if(payload.category === "convo") {
+    
+    await runConversation(message, current, appendMessage)
+
+    return null;
+  }
   
-
   appendMessage('NOT IMPLEMENTED', 'incoming')
-
 }

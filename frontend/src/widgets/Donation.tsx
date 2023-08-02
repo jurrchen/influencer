@@ -5,7 +5,7 @@ export default function Donation(props: {
 }){
     const [amount, setAmount] = useState("");
 
-    const handleAmountChange = (event) => {
+    const handleAmountChange = (event: any) => {
       setAmount(event.target.value);
     };
 

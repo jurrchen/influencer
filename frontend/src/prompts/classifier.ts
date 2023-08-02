@@ -6,8 +6,9 @@ export const CLASSIFIER = {
 
   Your goal is to understand the intent of the user message and respond with the correct category.
   
-  "editor":  The user is trying to modify the widgets on this website, either adding, removing, or modifying.
-  "global": The user is trying to edit a global setting on their website.
+  "global": The user is trying to edit a global setting on their website, like font color, background color, or font.
+  "editor":  The user is trying to modify the widgets on this website, either adding, removing, or modifying. The user is not trying to change global settings here.
+  "convo": The user is trying to start a conversation about building their business. Ignore other conversation topics.
   "misc": It is unclear what the user is trying to do or they are trying to do something that we don't have a category for.
   
   Respond only with the following JSON:
@@ -18,6 +19,3 @@ export const CLASSIFIER = {
   }
 `
 }
-
-
-// ROLE

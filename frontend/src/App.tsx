@@ -5,7 +5,7 @@ import Chat from "./Chat";
 import Website from './Website';
 
 import './App.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Section } from './lib/types';
 import * as WebFont from 'webfontloader';
 

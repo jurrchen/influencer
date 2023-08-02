@@ -43,7 +43,7 @@ Here are all the possible widgets in YAML, with name, description and parameters
       default: Donate & Send Message
 
 - name: "featured-collection"
-  description: A widget that displays a collection of products that the user is promoting and trying to sell.
+  description: A widget that displays a collection of products that the user is promoting and trying to sell. Can also be called a product listing.
   parameters:
     - heading: (string) Title at the top
     - number_of_items: (number)
