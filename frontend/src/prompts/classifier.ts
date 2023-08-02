@@ -8,9 +8,19 @@ export const CLASSIFIER = {
   
   "global": The user is trying to edit a global setting on their website, like font color, background color, or font.
   "editor":  The user is trying to modify the widgets on this website, either adding, removing, or modifying. The user is not trying to change global settings here.
-  "memberships": The user is trying to modify membership tiers or perks, either adding, removing, or modifying.
+  "memberships": The user is trying to modify membership tiers or perks, either adding, removing, or modifying. The user is not trying to edit widgets.
+  "products": The user is trying to modify products, either adding, removing, or modifying. The user is not trying to edit widgets.
   "convo": The user is trying to start a conversation about building their business. Ignore other conversation topics.
   "misc": It is unclear what the user is trying to do or they are trying to do something that we don't have a category for.
+
+  Widget names:
+  - donation
+  - featured-collection (can be called product listing)
+  - memberships (can also be called membership tiers)
+  - image-banner
+  - video-banner
+  - youtube-feed
+  - instagram-feed
   
   Respond only with the following JSON:
   

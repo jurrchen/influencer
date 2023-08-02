@@ -22,9 +22,7 @@ Widgets: ${JSON.stringify(memberships, null, 2)}
     "perks": [
       ... // list of strings
     ]
-  }  
-
-  Your goal is to understand the intent of the user message and respond with the correct category.
+  }
   
   For each tier, respond with the following JSON:
   {

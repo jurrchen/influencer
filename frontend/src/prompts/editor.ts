@@ -49,6 +49,11 @@ Here are all the possible widgets in YAML, with name, description and parameters
     - number_of_items: (number)
       default: 4
 
+- name: "memberships"
+  description: A widget that displays all the membership tiers for the user. Also called tiers or membership tiers.
+  parameters:
+    - heading: (string) Title at the top
+
 - name: "image-banner"
   description: An image banner with a title and call to action
   parameters:

@@ -1,12 +1,17 @@
-import { WebsiteDefinition } from "./lib/types"
+import { MembershipTier, Product, WebsiteDefinition } from "./lib/types"
 import Donation from "./widgets/Donation"
 import FeaturedCollection from "./widgets/FeaturedCollection"
 import ImageBanner from "./widgets/ImageBanner"
 import InstagramFeed from "./widgets/InstaFeed"
+import Memberships from "./widgets/Memberships"
 import VideoBanner from "./widgets/VideoBanner"
 import YoutubeFeed from "./widgets/YoutubeFeed"
 
-export default function Website(props: {website: WebsiteDefinition}) {
+export default function Website(props: {
+  website: WebsiteDefinition,
+  products: Product[],
+  memberships: MembershipTier[],
+}) {
   return <div style={{
     height: '800px', 
     width: '100%', 
@@ -29,7 +34,11 @@ export default function Website(props: {website: WebsiteDefinition}) {
             case 'donation':
               return <Donation {...section.parameters}/>
             case 'featured-collection':
-              return <FeaturedCollection {...section.parameters}/>
+              return <FeaturedCollection 
+                number_of_items={section.parameters.number_of_items || '4'} 
+                products={props.products}/>
+            case 'memberships':
+              return <Memberships tiers={props.memberships}/>
             case 'image-banner':
               return <ImageBanner {...section.parameters}/>
             case 'video-banner':
