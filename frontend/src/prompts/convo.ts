@@ -10,6 +10,8 @@ Memberships: (None)
 Products: (None)
 Website Widgets: 
   ${website.sections.map((w) => (`- ${w.widget}`)).join("\n")}
+User Info: Doobydobap is a 24 year old recipe developer and food scientist living in Seoul Korea making videos of cooking Korean food.
+
 `),
   system: `
 ###
@@ -21,7 +23,7 @@ Products:
   ...
 Website Widgets:
   ...
-
+User Info:
 
 ### 
 Respond with

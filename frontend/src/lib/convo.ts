@@ -41,7 +41,7 @@ export async function runConversation(
 
   const { data } = await openai.createEmbedding({
     input: question,
-    model: 'text-embedding-ada-002'
+    model: 'text-embedding-ada-002',
   });
 
   const { embedding } = data.data[0];
@@ -84,6 +84,7 @@ export async function runConversation(
 
   const checkPayload = JSON.parse(check.data.choices[0].message?.content || '{}');
 
+  appendMessage(`${mostSimilar.faq}`, "incoming")
   if (!checkPayload.similar) {
     appendMessage(JSON.stringify(checkPayload), "incoming")
 
