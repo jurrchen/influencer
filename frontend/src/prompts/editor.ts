@@ -53,6 +53,7 @@ Here are all the possible widgets in YAML, with name, description and parameters
   description: A widget that displays all the membership tiers for the user. Also called tiers or membership tiers.
   parameters:
     - heading: (string) Title at the top
+      default: Become a Member
 
 - name: "image-banner"
   description: An image banner with a title and call to action
@@ -64,8 +65,10 @@ Here are all the possible widgets in YAML, with name, description and parameters
     - subtitle: (string) The subtitle of the banner
       default: Check out our new, amazing summer collection with brilliant hoodies, t-shirts, hats, shoes and blazers.
     - call_to_action_1: (string) The call to action text on the first button
+      default: Shop now
     - link_1: (url) The link for the first button
     - call_to_action_2: (string) The call to action text on the second button
+      default: Visit Channel
     - link_2: (url) The link for the second button
 
 - name: "video-banner"
@@ -77,6 +80,8 @@ Here are all the possible widgets in YAML, with name, description and parameters
       default: MY NEW COLLECTION IS OUT NOW
     - subtitle: (string) The subtitle of the banner
       default: Check out our new, amazing summer collection with brilliant hoodies, t-shirts, hats, shoes and blazers.
+    - text_color: (string) The color of the header and subtitle
+      default: #000000
     - call_to_action_1: (string) The call to action text on the first button
       default: Shop now
     - link_1: (url) The link for the first button
@@ -97,11 +102,18 @@ Here are all the possible widgets in YAML, with name, description and parameters
   parameters:
   - heading: (string)
   - number_of_images: (number)
-    default: 6
+    default: 4
 
 - name: "unknown"
   description: Respond with unknown if you are not sure what widget to use.
 
+###
+
+Follow these rules when editing:
+1. If the user wants to add, do not remove any widgets.
+2. Always add widgets to the end.
+
+### 
 
 For each widget, respond with the following JSON:
 {

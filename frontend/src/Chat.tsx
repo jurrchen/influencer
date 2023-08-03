@@ -9,6 +9,7 @@ import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions"
 import { useCallback, useState } from "react";
 import openAIMessage from "./lib/openai";
 import { GlobalSetters, MembershipTier, Product, Section, WebsiteDefinition } from "./lib/types";
+import { Spinner } from "react-bootstrap";
 
 // send this shit direct to open AI
 // how do we maintain state?
@@ -17,6 +18,7 @@ import { GlobalSetters, MembershipTier, Product, Section, WebsiteDefinition } fr
 type Message = {
   message: string,
   direction: MessageDirection,
+  sender?: string
 };
 
 export default function Chat(props: {
@@ -31,10 +33,11 @@ export default function Chat(props: {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const appendMessage = useCallback((mess: string, direction: MessageDirection) => {
+  const appendMessage = useCallback((mess: string, direction: MessageDirection, sender?: string) => {
+    console.warn(mess, sender)
     setMessages(prevMessages => ([
       ...prevMessages,
-      { message: mess, direction},
+      { message: mess, direction, sender},
     ]))
   } , [setMessages]);
 
@@ -54,21 +57,34 @@ export default function Chat(props: {
         <ChatContainer>
           <MessageList>
             {
-              messages.map(({message, direction}) => (
+              messages.map(({message, direction, sender}) => (
                 <Message
                 model={{
                   type: "custom",
                   direction,
                   position: "single",
+                  sender,
                 }}
                 >
+                  { sender && <Message.Header sender={sender} />}
                   <Message.CustomContent>
-                    <div><b>{message}</b></div>
+                    <div>{message}</div>
                   </Message.CustomContent>
                 </Message>
               ))
 
             }
+            {loading && <Message
+              model={{
+                type: "custom",
+                direction: 'incoming',
+                position: "single",
+              }}
+            >
+              <Message.CustomContent>
+                <Spinner />
+              </Message.CustomContent>
+            </Message>}
           </MessageList>
           <MessageInput 
             placeholder="Type message here" 

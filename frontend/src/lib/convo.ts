@@ -36,7 +36,7 @@ function calculateCosineSimilarity(vectorA: number[], vectorB: number[]): number
 export async function runConversation(
   question: string,
   website: WebsiteDefinition,
-  appendMessage: (a: string, b: MessageDirection) => void,
+  appendMessage: (a: string, b: MessageDirection, s?: string) => void,
 ) {
 
   const { data } = await openai.createEmbedding({

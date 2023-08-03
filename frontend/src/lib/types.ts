@@ -8,6 +8,7 @@ export type Section = {
 }
 
 export type WebsiteDefinition = {
+  title: string,
   font: string,
   backgroundColor: string,
   fontColor: string,

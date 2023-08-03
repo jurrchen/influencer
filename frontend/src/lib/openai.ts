@@ -11,7 +11,7 @@ import { PRODUCTS } from "../prompts/products";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  organization: import.meta.env.VITE_OPENAI_ORGANIZATION,
+  // organization: import.meta.env.VITE_OPENAI_ORGANIZATION,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -19,7 +19,7 @@ const openai = new OpenAIApi(configuration);
 // TODO: make this a class
 export default async function openAIMessage(
   message: string, 
-  appendMessage: (a: string, b: MessageDirection) => void,
+  appendMessage: (a: string, b: MessageDirection, s?: string) => void,
   setSections: (s: Section[]) => void,
   setMemberships: (m: MembershipTier[]) => void,
   setProducts: (p: Product[]) => void,
@@ -58,14 +58,14 @@ export default async function openAIMessage(
     console.warn(globalPayload)
 
     globalPayload.forEach((change: any) => {
-      appendMessage(`Setting: ${change.setting} to ${change.value}`, 'incoming')
+      appendMessage(`Setting: ${change.setting} to ${change.value}`, 'incoming', 'globals')
       if (!change.setting) {
-        appendMessage(`Failure: ${change}`, 'incoming')
+        appendMessage(`Failure: ${change}`, 'incoming', 'globals')
         return;
       }
 
       if (!change.value) {
-        appendMessage(`No value specified: ${change}`, "incoming")
+        appendMessage(`No value specified: ${change}`, "incoming", 'globals')
         return;
       }
 
@@ -100,7 +100,7 @@ export default async function openAIMessage(
 
     const editorPayload = JSON.parse(editor.data.choices[0].message?.content || '{}')
 
-    console.warn(editorPayload);
+    appendMessage(editorPayload.reasoning, 'incoming', 'editor');
 
     // gets in an array
     // and then spits out an array
@@ -123,6 +123,8 @@ export default async function openAIMessage(
 
     console.warn(memberPayload);
 
+    appendMessage(memberPayload.reasoning, 'incoming', 'memberships');    
+
     setMemberships(memberPayload.tiers)
 
     return null;
@@ -140,6 +142,8 @@ export default async function openAIMessage(
     const productsPayload = JSON.parse(pp.data.choices[0].message?.content || '{}')
 
     console.warn(productsPayload);
+
+    appendMessage(productsPayload.reasoning, 'incoming', 'products');
 
     setProducts(productsPayload.products)
 

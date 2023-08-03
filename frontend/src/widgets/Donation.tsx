@@ -10,7 +10,7 @@ export default function Donation(props: {
     };
 
     return (
-        <div style={{width: '600px', margin: '20px auto'}}>
+        <div style={{width: '600px', margin: 'auto'}}>
             <h1>{props.heading}</h1>
             <h2>{props.description}</h2>
             <form>

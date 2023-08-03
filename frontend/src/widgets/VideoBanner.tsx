@@ -7,7 +7,7 @@ export default function VideoBanner(props: {
     <video playsInline autoPlay muted loop>
       <source src={props.background}/>
     </video>
-    <div className="content">
+    <div className="content" style={{color: props.text_color}}>
       <h1>{props.header}</h1>
       <p>{props.subtitle}</p>
       <div className="buttons">

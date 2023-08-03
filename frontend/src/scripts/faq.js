@@ -13,6 +13,9 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+/**
+ * DONT FORGET TO RUN yarn faq
+ */
 const FAQs = [
   {
     q: "How do I increase my revenue?",
@@ -41,6 +44,9 @@ There are a number of ways you can help.
 Do not make other suggestions as they are not relevant to the user's experience on FourthWall.
 `
   },
+/**
+ * DONT FORGET TO RUN yarn faq
+ */  
   {
     q: "What kind of product should I launch?",
     c: `
@@ -74,6 +80,9 @@ If the product type is not listed above, you can suggest a new product type, but
     `
   }
 ]
+/**
+ * DONT FORGET TO RUN yarn faq
+ */
 
 async function writeFAQs() {
   const ret = [];
