@@ -43,7 +43,7 @@ export default async function openAIMessage(
     throw new Error("FAIL")
   }
 
-  await appendMessage(JSON.stringify(payload, null, 2), 'incoming')
+  console.warn(payload);
   
   if (payload.category === "global") {
     const global = await openai.createChatCompletion({
@@ -55,10 +55,10 @@ export default async function openAIMessage(
     });
 
     const globalPayload = JSON.parse(global.data.choices[0].message?.content || '{}')
-    appendMessage(JSON.stringify(globalPayload, null, 2), 'incoming')
+    console.warn(globalPayload)
 
     globalPayload.forEach((change: any) => {
-      appendMessage(`Setting: ${change.setting}`, 'incoming')
+      appendMessage(`Setting: ${change.setting} to ${change.value}`, 'incoming')
       if (!change.setting) {
         appendMessage(`Failure: ${change}`, 'incoming')
         return;
@@ -100,7 +100,7 @@ export default async function openAIMessage(
 
     const editorPayload = JSON.parse(editor.data.choices[0].message?.content || '{}')
 
-    appendMessage(JSON.stringify(editorPayload, null, 2), 'incoming')
+    console.warn(editorPayload);
 
     // gets in an array
     // and then spits out an array
@@ -121,7 +121,7 @@ export default async function openAIMessage(
 
     const memberPayload = JSON.parse(members.data.choices[0].message?.content || '{}')
 
-    appendMessage(JSON.stringify(memberPayload, null, 2), 'incoming')
+    console.warn(memberPayload);
 
     setMemberships(memberPayload.tiers)
 
@@ -139,7 +139,7 @@ export default async function openAIMessage(
 
     const productsPayload = JSON.parse(pp.data.choices[0].message?.content || '{}')
 
-    appendMessage(JSON.stringify(productsPayload, null, 2), 'incoming')
+    console.warn(productsPayload);
 
     setProducts(productsPayload.products)
 
