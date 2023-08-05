@@ -40,6 +40,7 @@ export type MembershipTier = {
 
 export type Product = {
   title: string,
+  slogan: string,
   cost: string,
   image: string
 }
@@ -64,6 +65,7 @@ export type ProductWizard = {
   title: string | null;
   colors: string[] | null;
   slogan: string | null;
+  cost: string | null;
 }
 
 export type UserInfo = {

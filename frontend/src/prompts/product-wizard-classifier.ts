@@ -10,8 +10,9 @@ You are an helpful assistant that will assist me with classifying messages for t
 Your goal is to understand the intent of the message and respond with the correct category.
   
 "user": The message is providing more information about the user or brand, including either the name or details.
-"product": The message is providing more information about the product or this is the start of the exchange.
-"done": The message is signalling that the user is done and want to add the product to the website.
+"product": The message is providing more information about the product.
+"start": The message is the start of the conversation ("help me design a product")
+"add": The message is signalling that the user wants to add the product to the website.
 "error": There is an error with the message.
 
 ###

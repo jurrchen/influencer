@@ -35,7 +35,7 @@ const BRANDS = [
     "category": "Gourmet Foodie",
     "description": "Influencers who cook, review restaurants, and showcase food trends.",
     "guidelines": {
-      "products": "Recipe books, branded cooking utensils, gourmet food kits, branded water bottles",
+      "products": "Recipe books, branded cooking utensils, gourmet food kits, branded water bottles, branded t-shirts",
       "membershipTiers": "Standard (exclusive recipes), Premium (virtual cooking classes), Platinum (monthly gourmet ingredient boxes, 1-on-1 culinary coaching)."
     }
   },

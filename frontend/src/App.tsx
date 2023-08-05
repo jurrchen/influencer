@@ -41,8 +41,8 @@ function App() {
   const [ctaBackgroundColor, setCtaBackgroundColor] = useState('#000000')
 
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    brandName: 'doobydobap',
-    description: 'I am a food influencer who creates visually compelling food content about Korean food',
+    brandName: null,
+    description: null,
   })
 
   const [title] = useState("@mkbhd")

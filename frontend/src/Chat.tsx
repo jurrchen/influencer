@@ -116,6 +116,7 @@ export default function Chat(props: {
             </Message>}
           </MessageList>
           <MessageInput 
+            
             placeholder="Type message here" 
             disabled={loading}
             onSend={(message) => openAICompletion(message)}

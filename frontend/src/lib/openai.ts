@@ -17,7 +17,7 @@ import { selectBrandGuidelines } from "./brand";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  // organization: import.meta.env.VITE_OPENAI_ORGANIZATION,
+  organization: import.meta.env.VITE_OPENAI_ORGANIZATION,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -39,6 +39,7 @@ async function productMessage(
   setProductWizardState: (s: ProductWizard) => void,
   setUserInfo: (u: UserInfo) => void,
   //
+  appendProduct: (p: Product) => void,
 ) {
 
   const classifier = await openai.createChatCompletion({
@@ -52,7 +53,7 @@ async function productMessage(
   const classifierPayload = JSON.parse(classifier.data.choices[0].message?.content || '{}')
   console.warn(classifierPayload)
 
-  appendMessage(classifierPayload.category, 'incoming', 'product-wizard')
+  // appendMessage(classifierPayload.category, 'incoming', 'product-wizard')
 
   if (!classifierPayload.category) {
     appendMessage('error', 'incoming')
@@ -69,11 +70,7 @@ async function productMessage(
       ],
     });
 
-    appendMessage(wizard.data.choices[0].message?.content || '{}', 'incoming', 'product-wizard')
-
     const payload = JSON.parse(wizard.data.choices[0].message?.content || '{}')
-
-    appendMessage(JSON.stringify(payload, null, 2), 'incoming', 'product-wizard')
 
     setUserInfo({
       brandName: payload.brandName,
@@ -82,7 +79,7 @@ async function productMessage(
     brand = payload;
   }
 
-  if (classifierPayload.category === "product" || classifierPayload.category === "user") {
+  if (classifierPayload.category === "product" || classifierPayload.category === "start" || classifierPayload.category === "user") {
     if(!brand.brandName || !brand.description) {
       appendMessage('Tell me a bit more about your brand', 'incoming', 'product-wizard')
 
@@ -94,6 +91,8 @@ async function productMessage(
       return { name: brand.category, description: brand.description, products: brand.guidelines.products};
     });
 
+    console.warn(PRODUCT_WIZARD.user(message, userInfo, candidates))
+
     const wizard = await openai.createChatCompletion({
       model: PRODUCT_WIZARD.model,
       messages: [
@@ -102,9 +101,6 @@ async function productMessage(
       ],
     });
 
-    appendMessage(PRODUCT_WIZARD.user(message, userInfo, candidates), 'incoming')
-
-    appendMessage(wizard.data.choices[0].message?.content || '{}', 'incoming', 'product-wizard')
     const payload = JSON.parse(wizard.data.choices[0].message?.content || '{}')
 
     if (payload.error) {
@@ -112,7 +108,35 @@ async function productMessage(
       return null;
     }
 
-    appendMessage(JSON.stringify(payload, null, 2), 'incoming', 'product-wizard')
+    appendMessage(payload.reasoning, 'incoming', 'product-wizard')
+
+    setProductWizardState(payload)
+    return null;
+  }
+
+  if (classifierPayload.category === "add") {
+
+    // appendProduct(productWizardState)
+    const PR = {
+      'water-bottle': 'https://imgproxy.fourthwall.com/YMHcqXbGGZDyaKA9HndSawFKCRvS4zPel7nKo2OUvmI/w:720/plain/https://storage.googleapis.com/cdn.fourthwall.com/offer/demo_products/demo_water_bottle.png',
+      'hoodie': 'https://imgproxy.fourthwall.com/KCojgAUp0hzbz4va65HSIXD2PEzqxNvIf9tmvBCceyo/w:720/plain/https://storage.googleapis.com/cdn.fourthwall.com/offer/demo_products/demo_hoodie.png',
+      't-shirt': 'https://imgproxy.fourthwall.com/eOKxJFTS0r5tkwjD0bzzbgKeOlV2oCt9MUEPMZ3RL6g/w:720/plain/https://storage.googleapis.com/cdn.fourthwall.com/offer/demo_products/demo_tshirt.png',
+      'mug': 'https://imgproxy.fourthwall.com/Ttq9mgaiwW1oI42HpIDWY3P4KIBC22RGo2NNB9a106w/w:720/plain/https://storage.googleapis.com/cdn.fourthwall.com/offer/demo_products/demo_mug.png',
+      'e-book': 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Febook%2F&psig=AOvVaw0tPEPkcZN6nugkakB59ykq&ust=1691360571847000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCOCEgKPHxoADFQAAAAAdAAAAABAE'
+    }
+
+    const image = PR[productWizardState.type || ''] || 'https://imgproxy.fourthwall.com/YMHcqXbGGZDyaKA9HndSawFKCRvS4zPel7nKo2OUvmI/w:720/plain/https://storage.googleapis.com/cdn.fourthwall.com/offer/demo_products/demo_water_bottle.png'
+
+    appendProduct({
+      title: productWizardState.title || '',
+      slogan: productWizardState.slogan || '',
+      cost: productWizardState.cost || '',
+      image,
+    })
+
+    appendMessage('Product added!', 'incoming', 'product-wizard')
+
+    setWizardState("")
     return null;
   }
 
@@ -390,7 +414,10 @@ export default async function openAIMessage(
       appendMessage,
       setWizardState,
       setProductWizardState,
-      setUserInfo
+      setUserInfo,
+      (product: Product) => {
+        setProducts([...products, product])
+      }
     );
   } else if (wizardState === "membership") {
     return await membershipMessage(
