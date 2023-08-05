@@ -1,10 +1,10 @@
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 export default function MembershipTile(props: {
   title: string,
   cost: string, 
   perks: string[],
-  button?: boolean
+  button?: React.ReactElement
 }) {
   return <Card style={{ width: '18rem' }}>
     <Card.Body>
@@ -13,7 +13,7 @@ export default function MembershipTile(props: {
         ${props.cost} per month
       </Card.Text>
       { props.button && <Card.Footer>
-        <Button>Join now</Button>
+        {props.button}
       </Card.Footer> }      
       <Card.Footer>
         <b>Perks</b>

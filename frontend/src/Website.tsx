@@ -51,16 +51,24 @@ export default function Website(props: {
             case 'memberships':
               return  <div className="widget">
                 <Memberships 
+                  ctaBackgroundColor={props.website.ctaBackgroundColor}
+                  ctaColor={props.website.ctaColor}                
                   heading={section.parameters.heading} 
                   tiers={props.memberships}/>
               </div>
             case 'image-banner':
               return  <div className="widget">
-                <ImageBanner {...section.parameters}/>
+                <ImageBanner 
+                  ctaBackgroundColor={props.website.ctaBackgroundColor}
+                  ctaColor={props.website.ctaColor}
+                  {...section.parameters}/>
               </div>
             case 'video-banner':
               return  <div className="widget">
-                <VideoBanner {...section.parameters}/>
+                <VideoBanner 
+                  ctaBackgroundColor={props.website.ctaBackgroundColor}
+                  ctaColor={props.website.ctaColor}
+                  {...section.parameters}/>
               </div>
             case 'youtube-feed':
               return  <div className="widget">

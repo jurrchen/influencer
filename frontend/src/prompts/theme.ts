@@ -1,7 +1,7 @@
 import { GlobalsDelta } from "../lib/types"
 
 export const THEME = {
-  model: "gpt-3.5-turbo",
+  model: "gpt-4",
   theme: (theme: GlobalsDelta, name: string, description: string) => (`
   NAME: ${name}
   DESCRIPTION: ${description}
@@ -46,13 +46,14 @@ export const THEME = {
 
   Your goal is to understand the intent of the user message and choose the settings for a theme such that it matches the user intent.
   Consider the candidate themes, including whether the description of the theme matches the user message.
-  If necessary, you can mix and match 
 
   ########
 
   Some pointers:
   1. Make sure the call to action background color contrasts with the call to action font color
   2. All colors must be a hex string representing the color like "#FFFFFF"
+  3. If the name matches a candidate theme, use that theme verbatim.
+  4. If two of the themes are very similar, try mixing and matching and interpolating the themes.
 
   ########
 

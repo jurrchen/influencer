@@ -1,6 +1,8 @@
 import './VideoBanner.css'
 
 export default function VideoBanner(props: {
+  ctaBackgroundColor: string,
+  ctaColor: string,
   [key: string]: string
 }) {
   return <div className="video-banner">
@@ -11,8 +13,14 @@ export default function VideoBanner(props: {
       <h1>{props.header}</h1>
       <p>{props.subtitle}</p>
       <div className="buttons">
-        <button className="shop-now">{props.call_to_action_1}</button>
-        <button className="visit-channel">{props.call_to_action_2}</button>
+        <button 
+          className="shop-now" 
+          style={{backgroundColor: props.ctaBackgroundColor, color: props.ctaColor}}
+        >{props.call_to_action_1}</button>
+        <button 
+          className="visit-channel"
+          style={{backgroundColor: props.ctaBackgroundColor, color: props.ctaColor}}
+        >{props.call_to_action_2}</button>
       </div>
     </div> 
   </div>

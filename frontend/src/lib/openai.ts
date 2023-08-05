@@ -163,10 +163,10 @@ export default async function openAIMessage(
   if(payload.category === "theme") {
 
     const topThemes = await selectThemes(message)
-    appendMessage(JSON.stringify(current, null, 2), 'incoming', 'current')
+    console.warn(JSON.stringify(current, null, 2))
     const candidates: {role: ChatCompletionRequestMessageRoleEnum, content: string }[] = topThemes.map((theme, i) => {
-      appendMessage(JSON.stringify(theme, null, 2), 'incoming', 'theme')
-      return {role: "user", content: THEME.theme(current, `Candidate ${i+1}: ${theme.name}`, theme.description)}
+      console.warn(JSON.stringify(theme, null, 2))
+      return {role: "user", content: THEME.theme(theme, `Candidate ${i+1}: ${theme.name}`, theme.description)}
     });
     
     const theme = await openai.createChatCompletion({
@@ -180,8 +180,7 @@ export default async function openAIMessage(
     });
 
     const themePayload = JSON.parse(theme.data.choices[0].message?.content || '{}')
-    appendMessage(JSON.stringify(themePayload, null, 2), 'incoming', 'result')
-    // appendMessage(themePayload.reasoning, 'incoming')
+    appendMessage(themePayload.reasoning, 'incoming', 'theme')
 
     setGlobalsBatch(themePayload)
 

@@ -30,12 +30,11 @@
   padding: 10px 20px;
   margin-right: 10px;
   border: none;
-  background-color: #ff6347; /* Tomato */
   color: white;
   cursor: pointer;
   font-size: 1em;
 }
 
 .image-banner button:hover {
-  background-color: #ee5a24; /* Hover */
+  filter: brightness(0.9); /* Hover */
 }

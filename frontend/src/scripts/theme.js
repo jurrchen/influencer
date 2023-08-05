@@ -392,7 +392,7 @@ async function writeFAQs() {
     }
 
     const { data } = await openai.createEmbedding({
-      input: theme.description,
+      input: `${theme.name} ${theme.description}`,
       model: 'text-embedding-ada-002'      
     });
 
