@@ -31,6 +31,11 @@ export default function Website(props: {
         }}>{props.website.title}</Button>
       </div>
       {
+        !props.website.sections.length && <div style={{margin: 'auto', textAlign: 'center', paddingTop: '100px'}}>
+          <h3><i>Empty</i></h3>
+        </div>
+      }
+      {
         props.website.sections.map((section) => {
           switch(section.widget) {
             case 'donation':

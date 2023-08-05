@@ -44,6 +44,11 @@ export type Product = {
   image: string
 }
 
+export type ProductType = 'water-bottle' | 't-shirt' | 'mug' | 'hoodie';
+
+// type: string,
+// slogan: string,
+
 export type Theme = {
   name: string,
   description: string,
@@ -52,4 +57,16 @@ export type Theme = {
   fontColor: string,
   ctaBackgroundColor: string,
   ctaFontColor: string
+}
+
+export type ProductWizard = {
+  type: string | null;
+  title: string | null;
+  colors: string[] | null;
+  slogan: string | null;
+}
+
+export type UserInfo = {
+  brandName: string | null,
+  description: string | null,
 }

@@ -8,7 +8,7 @@ import {
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
 import { useCallback, useState } from "react";
 import openAIMessage from "./lib/openai";
-import { GlobalSetters, GlobalsDelta, MembershipTier, Product, Section, WebsiteDefinition } from "./lib/types";
+import { GlobalSetters, GlobalsDelta, MembershipTier, Product, ProductWizard, Section, UserInfo, WebsiteDefinition } from "./lib/types";
 import { Spinner } from "react-bootstrap";
 
 // send this shit direct to open AI
@@ -27,12 +27,23 @@ export default function Chat(props: {
   setProducts: (p: Product[]) => void,
   memberships: MembershipTier[],
   products: Product[],
+  userInfo: UserInfo,
   website: WebsiteDefinition,
   setGlobals: GlobalSetters,
   setGlobalsBatch: (g: GlobalsDelta) => void,
+  setUserInfo: (u: UserInfo) => void,
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [wizardState, setWizardState] = useState<string | null>(null);
+
+  const [productWizard, setProductWizard] = useState<ProductWizard>({
+    type: null,
+    title: null,
+    colors: null,
+    slogan: null,
+  });  
 
   const appendMessage = useCallback((mess: string, direction: MessageDirection, sender?: string) => {
     console.warn(mess, sender)
@@ -48,6 +59,8 @@ export default function Chat(props: {
     setLoading(true)
     
     await openAIMessage(
+      wizardState,
+      productWizard,
       message, 
       appendMessage, 
       props.setSections, 
@@ -55,9 +68,13 @@ export default function Chat(props: {
       props.setProducts, 
       props.setGlobals,
       props.setGlobalsBatch,
+      setWizardState,
+      setProductWizard,
+      props.setUserInfo,
       props.website, 
       props.memberships,
-      props.products
+      props.products,
+      props.userInfo,
     );
 
     setLoading(false)

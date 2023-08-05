@@ -2,7 +2,7 @@ import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "
 
 import { CLASSIFIER } from "../prompts/classifier";
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
-import { GlobalSetters, GlobalsDelta, MembershipTier, Product, Section, WebsiteDefinition } from "./types";
+import { GlobalSetters, GlobalsDelta, MembershipTier, Product, ProductWizard, Section, UserInfo, WebsiteDefinition } from "./types";
 import { GLOBAL } from "../prompts/global";
 import { EDITOR } from "../prompts/editor";
 import { runConversation } from "./convo";
@@ -10,6 +10,10 @@ import { MEMBERSHIPS } from "../prompts/memberships";
 import { PRODUCTS } from "../prompts/products";
 import { THEME } from "../prompts/theme";
 import { selectThemes } from "./themes";
+import { PRODUCT_WIZARD } from "../prompts/product-wizard";
+import { PRODUCT_WIZARD_CLASSIFIER } from "../prompts/product-wizard-classifier";
+import { USER_INFO } from "../prompts/user-info";
+import { selectBrandGuidelines } from "./brand";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -18,8 +22,119 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-// TODO: make this a class
-export default async function openAIMessage(
+
+
+function isCompleteProduct(p: ProductWizard) {
+  return !!(p.type && p.title && p.colors && p.slogan);
+}
+
+async function productMessage(
+  productWizardState: ProductWizard,  
+  userInfo: UserInfo,
+  //
+  message: string, 
+  //
+  appendMessage: (a: string, b: MessageDirection, s?: string) => void,
+  setWizardState: (s: string) => void,
+  setProductWizardState: (s: ProductWizard) => void,
+  setUserInfo: (u: UserInfo) => void,
+  //
+) {
+
+  const classifier = await openai.createChatCompletion({
+    model: PRODUCT_WIZARD_CLASSIFIER.model,
+    messages: [
+      {role: "system", content: PRODUCT_WIZARD_CLASSIFIER.system},
+      {role: "user", content: PRODUCT_WIZARD_CLASSIFIER.user(message, isCompleteProduct(productWizardState))}
+    ],
+  });
+
+  const classifierPayload = JSON.parse(classifier.data.choices[0].message?.content || '{}')
+  console.warn(classifierPayload)
+
+  appendMessage(classifierPayload.category, 'incoming', 'product-wizard')
+
+  if (!classifierPayload.category) {
+    appendMessage('error', 'incoming')
+    throw new Error("fail")
+  }  
+
+  let brand = userInfo;
+  if(classifierPayload.category === "user") {
+    const wizard = await openai.createChatCompletion({
+      model: USER_INFO.model,
+      messages: [
+        {role: "system", content: USER_INFO.system},
+        {role: "user", content: USER_INFO.user(userInfo.brandName, userInfo.description, message)}
+      ],
+    });
+
+    appendMessage(wizard.data.choices[0].message?.content || '{}', 'incoming', 'product-wizard')
+
+    const payload = JSON.parse(wizard.data.choices[0].message?.content || '{}')
+
+    appendMessage(JSON.stringify(payload, null, 2), 'incoming', 'product-wizard')
+
+    setUserInfo({
+      brandName: payload.brandName,
+      description: payload.description,
+    })
+    brand = payload;
+  }
+
+  if (classifierPayload.category === "product" || classifierPayload.category === "user") {
+    if(!brand.brandName || !brand.description) {
+      appendMessage('Tell me a bit more about your brand', 'incoming', 'product-wizard')
+
+      return null;
+    }
+
+    const topBrands = await selectBrandGuidelines(`${brand.brandName} ${brand.description}`, message)
+    const candidates = topBrands.map((brand,) => {
+      return { name: brand.category, description: brand.description, products: brand.guidelines.products};
+    });
+
+    const wizard = await openai.createChatCompletion({
+      model: PRODUCT_WIZARD.model,
+      messages: [
+        {role: "system", content: PRODUCT_WIZARD.system},
+        {role: "user", content: PRODUCT_WIZARD.user(message, userInfo, candidates)},
+      ],
+    });
+
+    appendMessage(PRODUCT_WIZARD.user(message, userInfo, candidates), 'incoming')
+
+    appendMessage(wizard.data.choices[0].message?.content || '{}', 'incoming', 'product-wizard')
+    const payload = JSON.parse(wizard.data.choices[0].message?.content || '{}')
+
+    if (payload.error) {
+      appendMessage(payload.error, 'incoming', 'product-wizard')
+      return null;
+    }
+
+    appendMessage(JSON.stringify(payload, null, 2), 'incoming', 'product-wizard')
+    return null;
+  }
+
+  return null;
+
+
+  // for each message, infer information and update the productWizardState
+
+  // appendMessage("Tell me about yourself and your business.", 'incoming', 'product-wizard')
+
+
+  // appendMessage(JSON.stringify(payload, null, 2), 'incoming', 'product-wizard')
+
+  // // follow up messages
+
+  // console.warn(payload);
+
+  // return null;
+
+}
+
+async function membershipMessage(
   message: string, 
   appendMessage: (a: string, b: MessageDirection, s?: string) => void,
   setSections: (s: Section[]) => void,
@@ -27,9 +142,29 @@ export default async function openAIMessage(
   setProducts: (p: Product[]) => void,
   setGlobals: GlobalSetters,
   setGlobalsBatch: (g: GlobalsDelta) => void,
+  setWizardState: (s: string) => void,
   current: WebsiteDefinition,
   memberships: MembershipTier[],
-  products: Product[],
+  products: Product[],  
+) {
+}
+
+async function rootMessage(
+  message: string,
+  appendMessage: (a: string, b: MessageDirection, s?: string) => void,
+  setSections: (s: Section[]) => void,
+  setMemberships: (m: MembershipTier[]) => void,
+  setProducts: (p: Product[]) => void,
+  setGlobals: GlobalSetters,
+  setGlobalsBatch: (g: GlobalsDelta) => void,
+  setWizardState: (s: string) => void,
+  setProductWizardState: (s: ProductWizard) => void,  
+  setUserInfo: (u: UserInfo) => void,
+  // true state
+  current: WebsiteDefinition,
+  memberships: MembershipTier[],
+  products: Product[],  
+  userInfo: UserInfo,  
 ) {
 
   const classifier = await openai.createChatCompletion({
@@ -185,7 +320,109 @@ export default async function openAIMessage(
     setGlobalsBatch(themePayload)
 
     return null;
-  }  
+  }
+
+  if(payload.category === "product-wizard") {
+    appendMessage('Okay. I can help with that!', 'incoming', payload.category)
+
+    const empty = {
+      type: null,
+      title: null,
+      colors: null,
+      slogan: null,      
+    }
+
+    await setWizardState("product")
+    await setProductWizardState(empty)
+
+    await productMessage(
+      empty,
+      userInfo,
+      message,
+      appendMessage,
+      setWizardState,
+      setProductWizardState,
+      setUserInfo,
+    )
+
+    return null;
+  }
+
+  if(payload.category === "membership-wizard") {
+    appendMessage('Okay. I can help with that!', 'incoming', payload.category)
+
+    await setWizardState("membership")
+    return null;
+  }
   
-  appendMessage('NOT IMPLEMENTED', 'incoming')
+  appendMessage('NOT IMPLEMENTED', 'incoming', payload.category)
+}
+
+// TODO: make this a class
+export default async function openAIMessage(
+  // convo state
+  wizardState: string | null,
+  productWizardState: ProductWizard,
+  //
+  message: string, 
+  // actions
+  appendMessage: (a: string, b: MessageDirection, s?: string) => void,
+  setSections: (s: Section[]) => void,
+  setMemberships: (m: MembershipTier[]) => void,
+  setProducts: (p: Product[]) => void,
+  setGlobals: GlobalSetters,
+  setGlobalsBatch: (g: GlobalsDelta) => void,
+  setWizardState: (s: string) => void,
+  setProductWizardState: (s: ProductWizard) => void,
+  setUserInfo: (u: UserInfo) => void,
+  // true state
+  current: WebsiteDefinition,
+  memberships: MembershipTier[],
+  products: Product[],
+  userInfo: UserInfo,
+) {
+
+  if (wizardState === "product") {
+    return await productMessage(
+      productWizardState,
+      userInfo,
+      message,
+      appendMessage,
+      setWizardState,
+      setProductWizardState,
+      setUserInfo
+    );
+  } else if (wizardState === "membership") {
+    return await membershipMessage(
+      message,
+      appendMessage,
+      setSections,
+      setMemberships,
+      setProducts,
+      setGlobals,
+      setGlobalsBatch,
+      setWizardState,
+      current,
+      memberships,
+      products,
+    );
+  } else {
+    // TODO: actually fall through dangerous here?
+    return await rootMessage(
+      message,
+      appendMessage,
+      setSections,
+      setMemberships,
+      setProducts,
+      setGlobals,
+      setGlobalsBatch,
+      setWizardState,
+      setProductWizardState,
+      setUserInfo,
+      current,
+      memberships,
+      products,
+      userInfo,
+    )
+  }
 }

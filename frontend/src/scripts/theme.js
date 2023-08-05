@@ -387,10 +387,6 @@ async function writeFAQs() {
   const ret = [];
 
   for(const theme of THEMES) {
-    if (theme.embedding) {
-      continue;
-    }
-
     const { data } = await openai.createEmbedding({
       input: `${theme.name} ${theme.description}`,
       model: 'text-embedding-ada-002'      

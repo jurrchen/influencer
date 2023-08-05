@@ -6,7 +6,7 @@ import Website from './Website';
 
 import './App.css';
 import { useEffect, useState } from 'react';
-import { GlobalsDelta, MembershipTier, Product, Section } from './lib/types';
+import { GlobalsDelta, MembershipTier, Product, Section, UserInfo } from './lib/types';
 import * as WebFont from 'webfontloader';
 import { Tab, Tabs } from 'react-bootstrap';
 import MembershipTile from './components/MembershipTile';
@@ -16,17 +16,7 @@ function App() {
 
   const [currentTab, setCurrentTab] = useState('website')
 
-  const [sections, setSections] = useState<Section[]>([{
-    widget: 'donation',
-    parameters: {
-      first_amount: "5",
-      second_amount: "10",
-      third_amount: "20",
-      heading: 'THANK YOU FOR YOUR SUPPORT!',
-      description: "Thank you so much for your support. Leave a message with your donation and I'll try to reply!",
-      call_to_action: "Donate & Send Message"
-    }
-  }])
+  const [sections, setSections] = useState<Section[]>([])
 
   /**
    * Globals
@@ -50,7 +40,12 @@ function App() {
   const [ctaColor, setCtaColor] = useState('#ffffff')
   const [ctaBackgroundColor, setCtaBackgroundColor] = useState('#000000')
 
-  const [title, setTitle] = useState("@mkbhd")
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    brandName: 'doobydobap',
+    description: 'I am a food influencer who creates visually compelling food content about Korean food',
+  })
+
+  const [title] = useState("@mkbhd")
 
   const setGlobalsBatch = (delta: GlobalsDelta) => {
     if(delta.font) {
@@ -145,6 +140,13 @@ function App() {
               })}
             </div>
           </Tab>
+          <Tab eventKey={"user"} title={"User"}>
+            <h2>User Info</h2>
+            <div>
+              <p><b>Brand:</b> {userInfo.brandName || '(None)'}</p>
+              <p><b>Description:</b> {userInfo.description || '(None)'}</p>
+            </div>
+          </Tab>
         </Tabs>
       </div>
       <div className="right-panel">
@@ -154,6 +156,7 @@ function App() {
           setProducts={setProducts}
           memberships={membershipTiers}
           products={products}
+          userInfo={userInfo}
           website={{
             title,
             font,
@@ -169,6 +172,7 @@ function App() {
             setFontColor,
           }}
           setGlobalsBatch={setGlobalsBatch}
+          setUserInfo={setUserInfo}
         />
       </div>
     </div>

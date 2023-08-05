@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "faq": "ts-node src/scripts/faq.js",
-    "theme": "ts-node src/scripts/theme.js"
+    "theme": "ts-node src/scripts/theme.js",
+    "brand": "ts-node src/scripts/brand.js"
   },
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^1.10.1",

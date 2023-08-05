@@ -9,9 +9,10 @@ export const CLASSIFIER = {
   "global": The user is trying to edit specific global settings on the website, like font color, background color, or font.
   "theme": The user is trying to change the general theme of the website.
   "editor":  The user is trying to modify the widgets on this website, either adding, removing, or modifying. This also includes changing settings on the widget. The user is not trying to change global settings here.
-  "memberships": The user is trying to modify membership tiers or perks, either adding, removing, or modifying. The user is not trying to edit widgets.
-  "products": The user is trying to modify the product listing, either adding, removing, or modifying. The user is not trying to edit widgets and not trying to brainstorm new products.
-  "convo": The user is trying to start a conversation about building their business. Ignore other conversation topics.
+  "memberships": The user is trying to directly modify membership tiers or perks, either adding, removing, or modifying. The user is not trying to edit widgets.
+  "products": The user is trying to directly modify the product listing, either adding, removing, or modifying. The user is not trying to edit widgets and not trying to brainstorm new products.
+  "product-wizard": The user is asking for help with designing a new product.
+  "memberships-wizard": The user is asking for help with designing a membership tiers system.
   "misc": It is unclear what the user is trying to do or they are trying to do something that we don't have a category for.
 
   ### 
