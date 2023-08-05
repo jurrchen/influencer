@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 export default function Donation(props: {
+    ctaColor: string,
+    ctaBackgroundColor: string,
     [key: string]: string
 }){
     const [amount, setAmount] = useState("");
@@ -22,7 +24,7 @@ export default function Donation(props: {
                     <button type="button" onClick={() => setAmount(props.third_amount)}>${props.third_amount}</button>
                     <input type="text" value={amount} onChange={handleAmountChange} placeholder="Custom amount"/>
                 </div>
-                <button type="submit" style={{backgroundColor: 'black', color: 'white', padding: '10px', width: '100%'}}>
+                <button type="submit" style={{backgroundColor: props.ctaBackgroundColor, color: props.ctaColor, padding: '10px', width: '100%'}}>
                     {props.call_to_action}
                 </button>
             </form>

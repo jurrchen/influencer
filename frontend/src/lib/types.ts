@@ -11,8 +11,19 @@ export type WebsiteDefinition = {
   title: string,
   font: string,
   backgroundColor: string,
+  ctaBackgroundColor: string,
+  ctaColor: string,
   fontColor: string,
   sections: Section[],
+}
+
+export type GlobalsDelta = {
+  title?: string,
+  font?: string,
+  backgroundColor?: string,
+  ctaBackgroundColor?: string,
+  ctaFontColor?: string,
+  fontColor?: string,
 }
 
 export type GlobalSetters = {
@@ -31,4 +42,14 @@ export type Product = {
   title: string,
   cost: string,
   image: string
+}
+
+export type Theme = {
+  name: string,
+  description: string,
+  backgroundColor: string,
+  font: string,
+  fontColor: string,
+  ctaBackgroundColor: string,
+  ctaFontColor: string
 }

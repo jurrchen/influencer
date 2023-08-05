@@ -8,7 +8,7 @@ import {
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
 import { useCallback, useState } from "react";
 import openAIMessage from "./lib/openai";
-import { GlobalSetters, MembershipTier, Product, Section, WebsiteDefinition } from "./lib/types";
+import { GlobalSetters, GlobalsDelta, MembershipTier, Product, Section, WebsiteDefinition } from "./lib/types";
 import { Spinner } from "react-bootstrap";
 
 // send this shit direct to open AI
@@ -29,6 +29,7 @@ export default function Chat(props: {
   products: Product[],
   website: WebsiteDefinition,
   setGlobals: GlobalSetters,
+  setGlobalsBatch: (g: GlobalsDelta) => void,
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
@@ -46,13 +47,24 @@ export default function Chat(props: {
 
     setLoading(true)
     
-    await openAIMessage(message, appendMessage, props.setSections, props.setMemberships, props.setProducts, props.setGlobals, props.website, props.memberships, props.products);
+    await openAIMessage(
+      message, 
+      appendMessage, 
+      props.setSections, 
+      props.setMemberships, 
+      props.setProducts, 
+      props.setGlobals,
+      props.setGlobalsBatch,
+      props.website, 
+      props.memberships,
+      props.products
+    );
 
     setLoading(false)
   }
 
   return (
-    <div style={{height: '800px', width: '300px'}}>
+    <div style={{height: '100vh', width: '300px'}}>
       <MainContainer>
         <ChatContainer>
           <MessageList>
@@ -68,7 +80,7 @@ export default function Chat(props: {
                 >
                   { sender && <Message.Header sender={sender} />}
                   <Message.CustomContent>
-                    <div>{message}</div>
+                    <div><b>{message}</b></div>
                   </Message.CustomContent>
                 </Message>
               ))

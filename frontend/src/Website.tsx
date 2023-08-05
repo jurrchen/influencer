@@ -25,14 +25,21 @@ export default function Website(props: {
   }}>
     <div style={{overflow: 'scroll', minWidth: '100%'}}>
       <div style={{margin: 'auto', textAlign: 'center', fontSize: 30}}>
-        <Button color="#000">@mkbhd</Button>
+        <Button style={{
+          backgroundColor: props.website.ctaBackgroundColor,
+          color: props.website.ctaColor,
+        }}>{props.website.title}</Button>
       </div>
       {
         props.website.sections.map((section) => {
           switch(section.widget) {
             case 'donation':
               return <div className="widget">
-                <Donation {...section.parameters}/>
+                <Donation 
+                  ctaColor={props.website.ctaColor}
+                  ctaBackgroundColor={props.website.ctaBackgroundColor}
+                  {...section.parameters}
+                />
               </div>
             case 'featured-collection':
               return  <div className="widget">

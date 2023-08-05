@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 config()
 
 import fs from 'fs';
+import process from "process";
 
 
 const configuration = new Configuration({

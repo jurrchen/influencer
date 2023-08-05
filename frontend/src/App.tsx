@@ -6,7 +6,7 @@ import Website from './Website';
 
 import './App.css';
 import { useEffect, useState } from 'react';
-import { MembershipTier, Product, Section } from './lib/types';
+import { GlobalsDelta, MembershipTier, Product, Section } from './lib/types';
 import * as WebFont from 'webfontloader';
 import { Tab, Tabs } from 'react-bootstrap';
 import MembershipTile from './components/MembershipTile';
@@ -28,6 +28,10 @@ function App() {
     }
   }])
 
+  /**
+   * Globals
+   */
+
   const [font, setFont] = useState('Arial')
   useEffect(() => {
     WebFont.load({
@@ -43,6 +47,40 @@ function App() {
 
   const [fontColor, setFontColor] = useState('#000000')
 
+  const [ctaColor, setCtaColor] = useState('#ffffff')
+  const [ctaBackgroundColor, setCtaBackgroundColor] = useState('#000000')
+
+  const [title, setTitle] = useState("@mkbhd")
+
+  const setGlobalsBatch = (delta: GlobalsDelta) => {
+    if(delta.font) {
+      setFont(delta.font)
+    }
+
+    if(delta.backgroundColor) {
+      setBackgroundColor(delta.backgroundColor)
+    }
+
+    if(delta.fontColor) {
+      setFontColor(delta.fontColor)
+    }
+
+    if(delta.font) {
+      setFont(delta.font)
+    }
+
+    if(delta.ctaFontColor) {
+      setCtaColor(delta.ctaFontColor)
+    }
+
+    if (delta.ctaBackgroundColor) {
+      setCtaBackgroundColor(delta.ctaBackgroundColor)
+    }
+  }
+
+  /**
+   * User models
+   */
   const [membershipTiers, setMemberships] = useState<MembershipTier[]>([
     {
       title: 'Supporter',
@@ -79,8 +117,11 @@ function App() {
           <Tab eventKey={"website"} title={"Website"}>
             <Website 
               website={{
+                title,
                 font,
                 fontColor,
+                ctaColor,
+                ctaBackgroundColor,
                 backgroundColor,
                 sections,
               }}
@@ -114,16 +155,20 @@ function App() {
           memberships={membershipTiers}
           products={products}
           website={{
+            title,
             font,
             fontColor,
+            ctaColor,
+            ctaBackgroundColor,
             backgroundColor,
-            sections
+            sections,
           }}
           setGlobals={{
             setFont,
             setBackgroundColor,
             setFontColor,
           }}
+          setGlobalsBatch={setGlobalsBatch}
         />
       </div>
     </div>

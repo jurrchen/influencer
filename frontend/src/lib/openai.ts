@@ -1,13 +1,15 @@
-import { Configuration, OpenAIApi } from "openai";
+import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai";
 
 import { CLASSIFIER } from "../prompts/classifier";
 import { MessageDirection } from "@chatscope/chat-ui-kit-react/src/types/unions";
-import { GlobalSetters, MembershipTier, Product, Section, WebsiteDefinition } from "./types";
+import { GlobalSetters, GlobalsDelta, MembershipTier, Product, Section, WebsiteDefinition } from "./types";
 import { GLOBAL } from "../prompts/global";
 import { EDITOR } from "../prompts/editor";
 import { runConversation } from "./convo";
 import { MEMBERSHIPS } from "../prompts/memberships";
 import { PRODUCTS } from "../prompts/products";
+import { THEME } from "../prompts/theme";
+import { selectThemes } from "./themes";
 
 const configuration = new Configuration({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -24,6 +26,7 @@ export default async function openAIMessage(
   setMemberships: (m: MembershipTier[]) => void,
   setProducts: (p: Product[]) => void,
   setGlobals: GlobalSetters,
+  setGlobalsBatch: (g: GlobalsDelta) => void,
   current: WebsiteDefinition,
   memberships: MembershipTier[],
   products: Product[],
@@ -156,6 +159,34 @@ export default async function openAIMessage(
 
     return null;
   }
+
+  if(payload.category === "theme") {
+
+    const topThemes = await selectThemes(message)
+    appendMessage(JSON.stringify(current, null, 2), 'incoming', 'current')
+    const candidates: {role: ChatCompletionRequestMessageRoleEnum, content: string }[] = topThemes.map((theme, i) => {
+      appendMessage(JSON.stringify(theme, null, 2), 'incoming', 'theme')
+      return {role: "user", content: THEME.theme(current, `Candidate ${i+1}: ${theme.name}`, theme.description)}
+    });
+    
+    const theme = await openai.createChatCompletion({
+      model: PRODUCTS.model,
+      messages: [
+        {role: "system", content: THEME.system},
+        {role: "user", content: THEME.theme(current, 'Existing settings', 'These are the current settings')},
+        ...candidates,
+        {role: "user", content: THEME.message(message)}
+      ],
+    });
+
+    const themePayload = JSON.parse(theme.data.choices[0].message?.content || '{}')
+    appendMessage(JSON.stringify(themePayload, null, 2), 'incoming', 'result')
+    // appendMessage(themePayload.reasoning, 'incoming')
+
+    setGlobalsBatch(themePayload)
+
+    return null;
+  }  
   
   appendMessage('NOT IMPLEMENTED', 'incoming')
 }
