@@ -43,7 +43,7 @@ Here are all the possible widgets in YAML, with name, description and parameters
       default: Donate & Send Message
 
 - name: "featured-collection"
-  description: A widget that displays a collection of products that the user is promoting and trying to sell. Can also be called a product listing.
+  description: A widget that displays a collection of products that the user is promoting and trying to sell. Can also be called a product listing or featured products.
   parameters:
     - heading: (string) Title at the top
     - number_of_items: (number)
@@ -75,7 +75,7 @@ Here are all the possible widgets in YAML, with name, description and parameters
   description: A video banner with a title and call to action
   parameters:
     - background: (url) The background image URL. Should link to a video.
-      default: "https://themes.fourthwall.com/themes/assets/db2c1500-ba02-4f1a-ab7f-2c560ae47c35/assets/video-1.mp4"
+      default: https://themes.fourthwall.com/themes/assets/db2c1500-ba02-4f1a-ab7f-2c560ae47c35/assets/video-1.mp4
     - header: (string) The title of the banner. All caps.
       default: MY NEW COLLECTION IS OUT NOW
     - subtitle: (string) The subtitle of the banner
@@ -112,6 +112,7 @@ Here are all the possible widgets in YAML, with name, description and parameters
 Follow these rules when editing:
 1. If the user wants to add, do not remove any widgets.
 2. Always add widgets to the end.
+3. Make sure to include all the parameters for the widget. If you are not sure, use the default value.
 
 ### 
 
@@ -119,7 +120,7 @@ For each widget, respond with the following JSON:
 {
   "widget": "...",
   "parameters": {
-    ... key value of parameters. Value should be return as string even if it is not.
+    ... // key value of parameters. Value should be return as string even if it is not.
   }
 }
 

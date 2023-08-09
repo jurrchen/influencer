@@ -101,6 +101,7 @@ async function productMessage(
       ],
     });
 
+    console.warn(wizard.data.choices[0].message?.content)
     const payload = JSON.parse(wizard.data.choices[0].message?.content || '{}')
 
     if (payload.error) {

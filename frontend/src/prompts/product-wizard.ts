@@ -44,8 +44,9 @@ Brand Guidelines:
 ###
 Follow these guidelines:
 1. Always use the first brand guideline. Use the second and third only if the name and description are relevant to the brand.
-2. Use the brand guidelines to create a unique product that fits the brand.
-3. Be as creative as possible.
+2. If none of the brand guidelines fit directly, try to combine any that are somewhat relevant.
+3. Use the brand guidelines to create a unique product that fits the brand.
+4. Be as creative as possible.
 
 
 ### 

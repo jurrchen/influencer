@@ -49,6 +49,8 @@ export default function Website(props: {
             case 'featured-collection':
               return  <div className="widget">
                 <FeaturedCollection 
+                  ctaColor={props.website.ctaColor}
+                  ctaBackgroundColor={props.website.ctaBackgroundColor}
                   number_of_items={section.parameters.number_of_items || '4'} 
                   heading={section.parameters.heading}
                   products={props.products}/>

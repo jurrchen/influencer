@@ -112,7 +112,7 @@ function App() {
           <Tab eventKey={"website"} title={"Website"}>
             <Website 
               website={{
-                title,
+                title: userInfo.brandName || '???',
                 font,
                 fontColor,
                 ctaColor,

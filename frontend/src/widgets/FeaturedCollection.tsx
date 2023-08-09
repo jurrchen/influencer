@@ -2,6 +2,8 @@ import { Product } from "../lib/types";
 import "./FeaturedCollection.css"
 
 export default function FeaturedCollection(props: {
+  ctaBackgroundColor: string,
+  ctaColor: string,
   number_of_items: string,
   heading: string | null,
   products: Product[]
@@ -13,7 +15,13 @@ export default function FeaturedCollection(props: {
           <div className="product-card" key={index}>
               <div className="product-image">
                   <img src={product.image} alt={product.title} />
-                  <button className="see-more-button">See More</button>
+                  <button 
+                    className="see-more-button"
+                    style={{
+                      backgroundColor: props.ctaBackgroundColor,
+                      color: props.ctaColor,
+                    }}
+                  >See More</button>
               </div>
               <h2 className="product-title">{product.title}</h2>
               <p className="product-price">${product.cost}</p>
